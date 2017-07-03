@@ -2,14 +2,17 @@ var express = require("express");
 var db = require("../models");
 
 // Create and export router. 
-
 var router = express.Router();
 
 
 // Create all our routes and set up logic within those routes where required.
 router.get("/", function (req, res) {
-  db.burger.findAll({}).then(function (results) {
-    res.json(results)
+  db.Burger.findAll({}).then(function (results) {
+     var hbsObject = {
+      burgers: results
+    };
+   
+    res.render("index", hbsObject)
   });
   // burgers.all(function(data) {
   //   var hbsObject = {
@@ -21,13 +24,13 @@ router.get("/", function (req, res) {
 });
 
 router.post("/", function (req, res) {
-
-db.Burger.create({
-      name: req.body.name,
-      devoured: req.body.devoured
-      }).then(function(results){
-        res.end();
-      });
+ 
+  db.Burger.create({
+    name: req.body.name,
+    devoured: req.body.devoured
+  }).then(function (results) {
+    res.redirect("/");
+  });
 
 
   // burgers.create([
@@ -41,17 +44,17 @@ db.Burger.create({
 
 router.put("/:id", function (req, res) {
 
- db.Burger.update(
-      {
-        devoured: req.body.devoured,
-      }, {
-        where: {
-          id: req.body.id,
-        }
+  db.Burger.update(
+    {
+      devoured: req.body.devoured,
+    }, {
+      where: {
+        id: req.params.id,
       }
-    ).then(function (dbBurger) {
-      res.json(dbBurger);
-    });
+    }
+  ).then(function (dbBurger) {
+    res.redirect("/");
+  });
 
   // var condition = "id = " + req.params.id;
 
@@ -68,12 +71,12 @@ router.put("/:id", function (req, res) {
 router.delete("/:id", function (req, res) {
 
   db.Burger.destroy({
-      where: {
-        id: req.params.id,
-      }
-    }).then(function (results) {
-      res.end();
-    })
+    where: {
+      id: req.params.id,
+    }
+  }).then(function (results) {
+    res.redirect("/");
+  })
 
   // var condition = "id = " + req.params.id;
 

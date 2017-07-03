@@ -7,5 +7,4 @@ module.exports = function(sequelize, DataTypes) {
 };
 
 
-//Export module. 
-module.exports = Burger;
+
